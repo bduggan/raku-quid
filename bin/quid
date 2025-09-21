@@ -1,0 +1,67 @@
+#!/usr/bin/env raku
+
+use lib $*HOME.child('raku-llm-dwim/lib');
+
+use Quid;
+use Log::Async;
+use Terminal::ANSI::OO;
+
+logger.send-to("quid.log");
+
+my $wkdir  = $*ENV<QUID_HOME> // $*HOME.child('quid-data');
+my $editor = $*ENV<EDITOR> //  "vim";
+
+sub edit(IO::Path $file) {
+  my $path = $wkdir.child($file);
+  indir $wkdir, {
+    put t.text-reset;
+    shell "$editor " ~ $path;
+    info "done editing " ~ $path;
+  }
+  exit note "no page" unless $path.IO.e;
+}
+
+multi MAIN('new') {
+  my $q = Quid.new(:$wkdir, :$editor);
+  my $name = prompt "Please enter a new for the new quid page: ";
+  my $page = "$name.quid".IO;
+  edit $page;
+  $q.start-ui: :page($name);
+}
+
+multi MAIN('edit', $name) {
+  my $q = Quid.new(:$wkdir, :$editor);
+  my $page = "$name.quid".IO;
+  edit $page;
+  $q.start-ui: :page($name);
+}
+
+multi MAIN() {
+  my $q = Quid.new(:$wkdir, :$editor);
+  info "welcome ? " ~ so $q.page-exists('welcome');
+  if $q.pages-exist {
+     $q.start-ui: 'browse';
+  } else {
+     $q.generate-welcome-page;
+     $q.start-ui: :page<welcome>;
+  }
+}
+
+multi MAIN('reset-conf') {
+  my $q = Quid.new(:$wkdir, :$editor);
+  my $file = $q.config-file;
+  if $file.IO.e {
+    $file.IO.unlink;
+    note "Deleted config file " ~ $file;
+  } else {
+    note "No config file to delete at " ~ $file;
+  }
+}
+
+multi MAIN('conf') {
+  my $q = Quid.new(:$wkdir, :$editor);
+  my $path = $q.config-file;
+  $path.IO.e or exit note "No config file at $path";
+  shell <<$editor $path>>;
+  note "Done editing config file at $path";
+}

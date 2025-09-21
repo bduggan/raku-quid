@@ -1,0 +1,18 @@
+#!raku
+
+use Test;
+
+plan 10;
+
+use-ok 'Quid';
+use-ok 'Quid::Cell';
+use-ok 'Quid::Conf';
+use-ok 'Quid::Events';
+use-ok 'Quid::Page';
+
+use-ok 'Quid::Plugin';
+use-ok 'Quid::Plugin::Duck';
+use-ok 'Quid::Plugin::LLM';
+use-ok 'Quid::Plugin::Text';
+
+use-ok 'Quid::Plugins';

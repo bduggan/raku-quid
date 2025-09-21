@@ -1,0 +1,64 @@
+unit class Quid::Plugouts;
+use Quid::Conf;
+use Log::Async;
+use Terminal::ANSI::OO 't';
+
+has @.rules;
+
+method configure(Quid::Conf $conf) {
+  @.rules = $conf.plugouts;
+}
+
+method dispatch(IO::Path $path, :$pane, :$data-dir, :$name, Str :$plugout_name) {
+  my @handlers;
+  for @.rules -> %entry {
+    next if $plugout_name && %entry<handler>.name ne $plugout_name;
+    my $regex := %entry<regex>;
+    if $path.Str ~~ /$regex/ {
+      my $handler = %entry<handler>;
+      @handlers.push: $handler;
+      
+    }
+  }
+  unless @handlers {
+    $pane.put: "No plugout handler matched for $path";
+    $pane.put: "Available plugout handlers:";
+    for @.rules -> %entry {
+      $pane.put: " - {%entry<regex>.raku} --> {%entry<handler-class>}";
+    }
+  }
+  unless @handlers {
+    $pane.put: "No plugouts matched for $path";
+    return;
+  }
+  my $handler = @handlers[0];
+  $pane.clear if $handler.clear-before;
+  for @handlers[1..*] {
+    $pane.put: [ t.color(%COLORS<button>) => '[' ~ .name ~ ']' ], meta => %( action => 'do_output', plugout_name => .name, :$path );
+  }
+  try {
+   $handler.pane = $pane;
+   $handler.execute(:$path, :$pane, :$data-dir, :$name);
+   $pane.select(0);
+   CATCH {
+     default {
+       $pane.put: "Error executing plugout handler: $_";
+       error "Error executing plugout handler: $_";
+       for Backtrace.new.Str.lines {
+          error "--> $_";
+        }
+    }
+   }
+  }
+}
+
+method list-all {
+  return @.rules.map: {
+    %(
+      regex => .<regex>,
+      name => .<handler>.name,
+      desc => .<handler>.description
+    )
+  }
+}
+

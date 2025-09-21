@@ -1,0 +1,84 @@
+use Test;
+use lib '.';
+use Quid;
+use Quid::Page;
+
+plan 13;
+
+# Setup temp directory for testing
+my $temp-dir will leave {
+    if .e {
+        for .dir -> $file { $file.unlink }
+        .rmdir;
+    }
+} = $*TMPDIR.child("quid-test-" ~ $*PID);
+
+# Test basic instantiation
+lives-ok { 
+    my $quid = Quid.new(wkdir => $temp-dir);
+}, 'can create Quid instance';
+
+# Test working directory creation
+{
+    my $new-dir will leave { .rmdir if .e } = $*TMPDIR.child("quid-new-" ~ $*PID);
+    my $quid = Quid.new(wkdir => $new-dir);
+    ok $new-dir.e, 'creates working directory if it does not exist';
+}
+
+# Test config file handling
+{
+    my $quid = Quid.new(wkdir => $temp-dir);
+    ok $quid.conf.defined, 'creates conf object';
+    ok $quid.config-file.defined, 'sets config file path';
+}
+
+# Test plugins and plugouts initialization
+{
+    my $quid = Quid.new(wkdir => $temp-dir);
+    isa-ok $quid.plugins, 'Quid::Plugins', 'initializes plugins';
+    isa-ok $quid.plugouts, 'Quid::Plugouts', 'initializes plugouts';
+}
+
+# Test data-dir method
+{
+    my $quid = Quid.new(wkdir => $temp-dir);
+    my $page = Quid::Page.new(name => 'test-page', wkdir => $temp-dir);
+    $quid.current-page = $page;
+    is $quid.data-dir, $temp-dir.child('test-page'), 'data-dir returns correct path';
+}
+
+# Test page-exists method
+{
+    my $quid = Quid.new(wkdir => $temp-dir);
+    nok $quid.page-exists('nonexistent'), 'page-exists returns false for nonexistent page';
+    
+    # Create a test page file
+    my $test-file = $temp-dir.child('test.quid');
+    $test-file.spurt('-- text\ntest content\n');
+    ok $quid.page-exists('test'), 'page-exists returns true for existing page';
+}
+
+# Test pages-exist method
+{
+    my $empty-dir will leave { 
+        if .e {
+            for .dir -> $file { $file.unlink }
+            .rmdir;
+        } } = $*TMPDIR.child("quid-empty-" ~ $*PID);
+    mkdir $empty-dir;
+    my $quid = Quid.new(wkdir => $empty-dir);
+    nok $quid.pages-exist, 'pages-exist returns false when no pages exist';
+    
+    # Add a page
+    $empty-dir.child('sample.quid').spurt('-- text\ncontent');
+    ok $quid.pages-exist, 'pages-exist returns true when pages exist';
+}
+
+# Test generate-welcome-page
+{
+    my $quid = Quid.new(wkdir => $temp-dir);
+    lives-ok { $quid.generate-welcome-page }, 'can generate welcome page';
+    ok $quid.page-exists('welcome'), 'welcome page is created';
+}
+
+done-testing;
