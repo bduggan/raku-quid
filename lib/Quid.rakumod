@@ -234,16 +234,51 @@ Quid -- Raku notebooks for data exploration
 
 =head1 SYNOPSIS
 
-   quid
-   quid new
-   quid edit life
+Usage:
+  quid -- Browse pages
+  quid new -- Open a new page for editing
+  quid edit <name> -- Edit a page with the given name
+  quid reset-conf -- Reset the configuration to the default
+  quid conf -- Edit the configuration file
 
 =head1 DESCRIPTION
 
-Quid is a console application forthat uses plugins and plugouts to read and view data.
+Quid is a console application for data exploration and analysis.
 
-It has some similarities to Jupyter and other notebook environment, but has some
-distinctive features:
+It has some similarities to other notebooks like Wolfram,  R, Jupyter and Observable,
+but is a but more in line with the Raku programming langauge and adheres to
+the philosophy of being "opinionated about being not opinionated" and trying
+stich together various other languages.  Here's a quick example:
+
+```
+-- bash
+echo "a,b,c" > out.csv
+echo "1,2,3" >> out.csv
+echo "done!"
+
+-- duck
+select * from 'out.csv';
+
+-- python
+print("hello world")
+
+-- ruby
+puts "hello world"
+
+-- html
+<p>
+<pre>
+python says:
+<<< cells(2).content >>>
+<<< cells(2).out >>>
+
+and ruby says
+<<< cells(3).content >>>
+<<< cells(3).out >>>
+</pre>
+
+```
+Some of its features:
 
 * Notebooks (called "pages") are plain text.  Pages are divided into cells.
   Lines starting with two dashes ("--") divide a page into cells.
@@ -251,43 +286,12 @@ distinctive features:
 * Cell output are defined by plugins, and every output is stored as a file within
   the data directory for the page.
 
-* Cells can use other cells outputs by reading those files.
-
 * Cell types are defined by a configuration file, and new cell types can be easily added with
   the cell plugin architecture.
 
 * Displaying outputs of cells is also done with a plugout architectures, and new output/export
-  options can easily be added as plugins.
+  options can be added as plugins.
 
-Enough description!  Here is what it looks like:
-
-Sample page 1:
-
-   -- duck
-   select 42 as the_answer;
-
-   -- llm
-   What is the question if 〈prev.rows[0]<the_answer> 〉 is the answer?
-
-   -- html
-   First cell output was 〈cells(0).rows[0]<the_answer> 〉.
-
-This page has two cells.  The first is a duckdb query, the second is an LLM query.
-
-After running the first, a CSV file is created.  Refreshing the page updates
-the second one to look like this:
-
-   -- duck
-   select 42 as the_answer;
-
-   -- llm
-   What is the question if 42 is the answer?
-
-Then running the second sends a query to an LLM.
-
-The symbols "〈" and "〉" are used to indicate code that should be evaluated.  You
-can also use "<<<" and ">>>".  Pro typ: type the former with vim, you can use a digraph --
-type "control-k" and then "<" and "/".
 
 =head1 CONFIGURATION
 
@@ -342,6 +346,38 @@ ruby cells:
         / .*   /   => 'Quid::Plugout::Raw',
       ]
     ;
+
+=head2 EXAMPLES
+
+More examples!
+
+Sample page 1:
+
+   -- duck
+   select 42 as the_answer;
+
+   -- llm
+   What is the question if 〈prev.rows[0]<the_answer> 〉 is the answer?
+
+   -- html
+   First cell output was 〈cells(0).rows[0]<the_answer> 〉.
+
+This page has two cells.  The first is a duckdb query, the second is an LLM query.
+
+After running the first, a CSV file is created.  Refreshing the page updates
+the second one to look like this:
+
+   -- duck
+   select 42 as the_answer;
+
+   -- llm
+   What is the question if 42 is the answer?
+
+Then running the second sends a query to an LLM.
+
+The symbols "〈" and "〉" are used to indicate code that should be evaluated.  You
+can also use "<<<" and ">>>".  Pro tip: if you use vim, you can type "〈" using a
+digraph: type "control-k" and then "<" and "/".
 
 Here's an example using the python plugin defined above:
 
