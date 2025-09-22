@@ -1,42 +1,35 @@
 name: Linux
-
 on:
   push:
-    branches:
-      - '*'
-    tags-ignore:
-      - '*'
+    branches: ['*']
+    tags-ignore: ['*']
   pull_request:
 
 jobs:
   raku:
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-        raku-version:
-          - '2024.05'
-          - 'latest'
-        duckdb-version:
-          - '1.1.1'
-    runs-on: ${{ matrix.os }}
+        raku-version: ['2024.05', 'latest']
+        duckdb-version: ['1.1.1']
+    runs-on: ubuntu-latest
+    
     steps:
-      - name: install packages
-        run: sudo apt-get install -y curl
-      - uses: actions/checkout@v3
-      - name: Install native deps
+      - uses: actions/checkout@v4
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install -y curl wget unzip
+      - name: Install DuckDB library
         run: |
           wget https://github.com/duckdb/duckdb/releases/download/v${{ matrix.duckdb-version }}/libduckdb-linux-amd64.zip
           unzip libduckdb-linux-amd64.zip
           sudo cp libduckdb.so /usr/lib
-      - name: install duckdb binary
+      - name: Install DuckDB binary
         run: curl https://install.duckdb.org | sh
       - uses: Raku/setup-raku@v1
         with:
           raku-version: ${{ matrix.raku-version }}
-      - name: install problematic deps
+      - name: Install problematic deps
         run: zef install --/test File::Find
-      - name: Install Dependencies
+      - name: Install dependencies
         run: zef install --deps-only .
-      - name: Run Tests
+      - name: Run tests
         run: zef test -v .
