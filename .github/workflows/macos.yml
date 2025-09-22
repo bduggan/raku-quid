@@ -19,6 +19,7 @@ jobs:
         run: |
           wget https://github.com/duckdb/duckdb/releases/download/v${{ matrix.duckdb-version }}/libduckdb-osx-universal.zip
           unzip libduckdb-osx-universal.zip
+          sudo mkdir -p /usr/local/lib
           sudo cp libduckdb.dylib /usr/local/lib/
       - name: Install DuckDB binary
         run: |
