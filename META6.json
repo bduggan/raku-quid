@@ -1,5 +1,6 @@
 {
   "name" : "Quid",
+  "description" : "Raku notebooks for data exploration",
   "authors" : [
     "Brian Duggan"
   ],

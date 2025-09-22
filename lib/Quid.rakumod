@@ -230,7 +230,7 @@ method pages-exist {
 
 =head1 NAME
 
-Quid -- Query Independent sources of Data
+Quid -- Raku notebooks for data exploration
 
 =head1 SYNOPSIS
 
@@ -240,7 +240,7 @@ Quid -- Query Independent sources of Data
 
 =head1 DESCRIPTION
 
-Quid is a console application that uses plugins and plugouts to read and view data.
+Quid is a console application forthat uses plugins and plugouts to read and view data.
 
 It has some similarities to Jupyter and other notebook environment, but has some
 distinctive features:

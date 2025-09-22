@@ -21,21 +21,7 @@ sub edit(IO::Path $file) {
   exit note "no page" unless $path.IO.e;
 }
 
-multi MAIN('new') {
-  my $q = Quid.new(:$wkdir, :$editor);
-  my $name = prompt "Please enter a new for the new quid page: ";
-  my $page = "$name.quid".IO;
-  edit $page;
-  $q.start-ui: :page($name);
-}
-
-multi MAIN('edit', $name) {
-  my $q = Quid.new(:$wkdir, :$editor);
-  my $page = "$name.quid".IO;
-  edit $page;
-  $q.start-ui: :page($name);
-}
-
+#| Browse pages
 multi MAIN() {
   my $q = Quid.new(:$wkdir, :$editor);
   info "welcome ? " ~ so $q.page-exists('welcome');
@@ -47,6 +33,24 @@ multi MAIN() {
   }
 }
 
+#| Open a new page for editing
+multi MAIN('new') {
+  my $q = Quid.new(:$wkdir, :$editor);
+  my $name = prompt "Please enter a new for the new quid page: ";
+  my $page = "$name.quid".IO;
+  edit $page;
+  $q.start-ui: :page($name);
+}
+
+#| Edit a page with the given name
+multi MAIN('edit', $name) {
+  my $q = Quid.new(:$wkdir, :$editor);
+  my $page = "$name.quid".IO;
+  edit $page;
+  $q.start-ui: :page($name);
+}
+
+#| Reset the configuration to the default
 multi MAIN('reset-conf') {
   my $q = Quid.new(:$wkdir, :$editor);
   my $file = $q.config-file;
@@ -58,6 +62,7 @@ multi MAIN('reset-conf') {
   }
 }
 
+#| Edit the configuration file
 multi MAIN('conf') {
   my $q = Quid.new(:$wkdir, :$editor);
   my $path = $q.config-file;
