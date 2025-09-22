@@ -18,6 +18,8 @@ jobs:
           - 'latest'
     runs-on: ${{ matrix.os }}
     steps:
+      - name: install packages
+        run: brew install duckdb
       - uses: actions/checkout@v3
       - name: Install native deps
         run: |
