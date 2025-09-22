@@ -23,7 +23,9 @@ jobs:
           unzip libduckdb-linux-amd64.zip
           sudo cp libduckdb.so /usr/lib
       - name: Install DuckDB binary
-        run: curl https://install.duckdb.org | sh
+        run: |
+          curl https://install.duckdb.org | sh
+          echo "$HOME/.duckdb/cli/latest" >> $GITHUB_PATH
       - uses: Raku/setup-raku@v1
         with:
           raku-version: ${{ matrix.raku-version }}

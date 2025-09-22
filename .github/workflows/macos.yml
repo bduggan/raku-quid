@@ -21,7 +21,9 @@ jobs:
           unzip libduckdb-osx-universal.zip
           sudo cp libduckdb.dylib /usr/local/lib/
       - name: Install DuckDB binary
-        run: brew install duckdb
+        run: |
+          curl https://install.duckdb.org | sh
+          echo "$HOME/.duckdb/cli/latest" >> $GITHUB_PATH
       - uses: Raku/setup-raku@v1
         with:
           raku-version: ${{ matrix.raku-version }}
