@@ -27,6 +27,8 @@ jobs:
       - uses: Raku/setup-raku@v1
         with:
           raku-version: ${{ matrix.raku-version }}
+      - name: install problematic deps
+        run: zef install --/test File::Find
       - name: Install Dependencies
         run: zef install --deps-only .
       - name: Run Tests
