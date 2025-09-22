@@ -246,7 +246,7 @@ Usage:
 Quid is a console application for data exploration and analysis.
 
 It has some similarities to other notebooks like Wolfram,  R, Jupyter and Observable,
-but is a but more in line with the Raku programming langauge and adheres to
+but is a bit more in line with the Raku programming langauge and adheres to
 the philosophy of being "opinionated about being not opinionated" and trying
 stich together various other languages.  Here's a quick example:
 
