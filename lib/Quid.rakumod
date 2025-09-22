@@ -250,7 +250,8 @@ but is a but more in line with the Raku programming langauge and adheres to
 the philosophy of being "opinionated about being not opinionated" and trying
 stich together various other languages.  Here's a quick example:
 
-```
+=begin code
+
 -- bash
 echo "a,b,c" > out.csv
 echo "1,2,3" >> out.csv
@@ -277,7 +278,8 @@ and ruby says
 <<< cells(3).out >>>
 </pre>
 
-```
+=end code
+
 Some of its features:
 
 * Notebooks (called "pages") are plain text.  Pages are divided into cells.
@@ -353,25 +355,33 @@ More examples!
 
 Sample page 1:
 
-   -- duck
-   select 42 as the_answer;
+=begin code
 
-   -- llm
-   What is the question if 〈prev.rows[0]<the_answer> 〉 is the answer?
+-- duck
+select 42 as the_answer;
 
-   -- html
-   First cell output was 〈cells(0).rows[0]<the_answer> 〉.
+-- llm
+What is the question if 〈prev.rows[0]<the_answer> 〉 is the answer?
+
+-- html
+First cell output was 〈cells(0).rows[0]<the_answer> 〉.
+
+=end code
 
 This page has two cells.  The first is a duckdb query, the second is an LLM query.
 
 After running the first, a CSV file is created.  Refreshing the page updates
 the second one to look like this:
 
-   -- duck
-   select 42 as the_answer;
+=begin code
 
-   -- llm
-   What is the question if 42 is the answer?
+-- duck
+select 42 as the_answer;
+
+-- llm
+What is the question if 42 is the answer?
+
+=end code
 
 Then running the second sends a query to an LLM.
 
@@ -381,42 +391,46 @@ digraph: type "control-k" and then "<" and "/".
 
 Here's an example using the python plugin defined above:
 
-    -- llm
+=begin code
 
-    How do I print a python df to a csv?  be concise
+-- llm
 
-    -- python
+How do I print a python df to a csv?  be concise
 
-    import pandas as pd
-    import os
-    print(os.getcwd())
-    df = pd.DataFrame( { 'a': [1,2,3,4], 'b': [5,6,7,8] } )
-    df.to_csv('out.csv')
-    print(df)
+-- python
 
-    -- duck
+import pandas as pd
+import os
+print(os.getcwd())
+df = pd.DataFrame( { 'a': [1,2,3,4], 'b': [5,6,7,8] } )
+df.to_csv('out.csv')
+print(df)
 
-    select * from 'out.csv'
+-- duck
 
-    -- python
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    df = pd.read_csv('out.csv')
-    df.plot(kind='bar', x='a', y='b')
-    plt.savefig('plot.png')
-    plt.show()
-    plt.close()
-    df
+select * from 'out.csv'
 
-    -- html
-    <h2>data</h2>
-    <p>
-    <img src='plot.png'>
-    </p>
-    <pre>
-    code:
-    〈 cells(1).content 〉
-    </pre>
+-- python
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv('out.csv')
+df.plot(kind='bar', x='a', y='b')
+plt.savefig('plot.png')
+plt.show()
+plt.close()
+df
+
+-- html
+<h2>data</h2>
+<p>
+<img src='plot.png'>
+</p>
+<pre>
+code:
+〈 cells(1).content 〉
+</pre>
+
+=end code
 
 
 =end pod

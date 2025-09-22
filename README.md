@@ -18,19 +18,33 @@ Quid is a console application for data exploration and analysis.
 
 It has some similarities to other notebooks like Wolfram, R, Jupyter and Observable, but is a but more in line with the Raku programming langauge and adheres to the philosophy of being "opinionated about being not opinionated" and trying stich together various other languages. Here's a quick example:
 
-``` -- bash echo "a,b,c" > out.csv echo "1,2,3" >> out.csv echo "done!"
+    -- bash
+    echo "a,b,c" > out.csv
+    echo "1,2,3" >> out.csv
+    echo "done!"
 
--- duck select * from 'out.csv';
+    -- duck
+    select * from 'out.csv';
 
--- python print("hello world")
+    -- python
+    print("hello world")
 
--- ruby puts "hello world"
+    -- ruby
+    puts "hello world"
 
--- html <p> <pre> python says: <<< cells(2).content >>> <<< cells(2).out >>>
+    -- html
+    <p>
+    <pre>
+    python says:
+    <<< cells(2).content >>>
+    <<< cells(2).out >>>
 
-and ruby says <<< cells(3).content >>> <<< cells(3).out >>> </pre>
+    and ruby says
+    <<< cells(3).content >>>
+    <<< cells(3).out >>>
+    </pre>
 
-``` Some of its features:
+Some of its features:
 
 * Notebooks (called "pages") are plain text. Pages are divided into cells. Lines starting with two dashes ("--") divide a page into cells.
 
