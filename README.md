@@ -9,7 +9,12 @@ Quid -- Raku notebooks for data exploration
 SYNOPSIS
 ========
 
-Usage: quid -- Browse pages quid new -- Open a new page for editing quid edit <name> -- Edit a page with the given name quid reset-conf -- Reset the configuration to the default quid conf -- Edit the configuration file
+    Usage:
+      quid -- Browse pages
+      quid new -- Open a new page for editing
+      quid edit <name> -- Edit a page with the given name
+      quid reset-conf -- Reset the configuration to the default
+      quid conf -- Edit the configuration file
 
 DESCRIPTION
 ===========

@@ -234,12 +234,16 @@ Quid -- Raku notebooks for data exploration
 
 =head1 SYNOPSIS
 
+=begin code
+
 Usage:
   quid -- Browse pages
   quid new -- Open a new page for editing
   quid edit <name> -- Edit a page with the given name
   quid reset-conf -- Reset the configuration to the default
   quid conf -- Edit the configuration file
+
+=end code
 
 =head1 DESCRIPTION
 
