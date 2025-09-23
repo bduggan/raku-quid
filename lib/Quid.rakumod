@@ -277,18 +277,18 @@ when printing hello world.  Be concise.
 -- html
 <pre>
 python says:
-  〈 cells(2).content 〉
-  〈 cells(2).out 〉
+  〈 cells(2).content.trim 〉
+  〈 cells(2).output-file.slurp.trim 〉
 
  and ruby says
-   〈 cells(3).content 〉
-   〈 cells(3).out 〉
+   〈 cells(3).content.trim 〉
+   〈 cells(3).output-file.slurp.trim 〉
 </pre>
 
 and the LLM says
 
 <pre>
-  〈 cells(4).out 〉
+  〈 cells(4).output-file.slurp.trim 〉
 </pre>
 
 =end code
