@@ -34,23 +34,23 @@ method do-done($res) {
   }
 }
 
-method do-react-loop($proc, :$cell) {
+method do-react-loop($proc, :$cell, :$out) {
   my $cwd = $cell.data-dir;
   my $env = %*ENV.clone;
   for self.add-env.kv -> $k, $v { $env{$k} = $v; }
   react {
     whenever $proc.ready { self.do-ready($_, $proc); }
-    whenever $proc.stdout.lines { $.output-stream.send: $_; sleep 0.02;}
+    whenever $proc.stdout.lines { $.output-stream.send: $_; sleep 0.02; $out.put($_) if $out; }
     whenever $proc.stderr.lines { $.output-stream.send: "ERR: $_"; sleep 0.02;}
     whenever $proc.start(:$cwd,:$env) { self.do-done($_); done; }
   }
 }
 
-method execute(:$cell, :$mode, :$page) {
+method execute(:$cell, :$mode, :$page, :$out) {
   $cell.get-content(:$mode, :$page) ==> spurt self.tmpfile;
   my @cmd = self.command;
   my $proc = Proc::Async.new: |@cmd, :out, :err;
-  self.do-react-loop($proc, :$cell);
+  self.do-react-loop($proc, :$cell, :$out);
 }
 
 method tmpfile {

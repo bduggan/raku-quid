@@ -124,7 +124,11 @@ class Quid::Cell {
     indir self.cell-dir, {
       info "In directory {self.cell-dir}";
       try {
-        $.plugin.execute: cell => self, :$mode, :$page;
+        my $out = self.output-file.open(:w) if $.plugin.write-output;
+        LEAVE {
+          try { $out.close } if $out;
+        }
+        $.plugin.execute: cell => self, :$mode, :$page, :$out;
         CATCH {
           default {
             $!errors = "Errors running { $.plugin.name } : $_";

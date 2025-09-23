@@ -16,6 +16,7 @@ method stream-output { False }
 method setup {}
 
 method output-ext { 'csv' }
+method write-output { True }
 
 has $.output; # Str or array
 has Channel $.output-stream = Channel.new;

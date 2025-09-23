@@ -18,7 +18,7 @@ method setup {
   info "version $!version-info";
 }
 
-method execute(:$cell!, :$page!, :$mode!) {
+method execute(:$cell!, :$page!, :$mode!, :$out) {
   info "Executing duck cell";
   my $timeout = $cell.get-conf('timeout') // 5;
   self.doing: "running $.executable";
@@ -29,14 +29,12 @@ method execute(:$cell!, :$page!, :$mode!) {
   $!errors = Nil;
   $!output = Nil;
 
-  my $out-fd = $cell.output-file.open(:w);
-
   try react {
       whenever $proc.ready { self.do-ready($_, $proc,$timeout); }
       whenever $proc.stderr.lines { self.warn: "$_"; }
 
       whenever $proc.stdout.lines {
-        $out-fd.put: $_;
+        $out.put: $_;
         sleep 0.01; # let the UI breathe
       }
       whenever $proc.start(:$cwd) {
@@ -58,8 +56,8 @@ method execute(:$cell!, :$page!, :$mode!) {
         }
       }
    }
-   $out-fd.close;
    self.error("Execution failed: $_") with $!;
+   $out.close;
    with $cell.output-file.IO {
      unless .e && (.s > 0) {
        $!errors = "No output generated";
