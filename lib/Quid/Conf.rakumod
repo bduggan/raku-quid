@@ -61,9 +61,14 @@ multi method load-handler($handler) {
 submethod TWEAK {
   die "Config file does not exist: { $!file }" unless $!file.IO.e;
   my %*quid-conf;
-  try $!file.IO.slurp.EVAL;
-  if $! {
-    die "Error loading config file { $!file }: { $! }";
+  try {
+    $!file.IO.slurp.EVAL;
+    CATCH {
+      default {
+        die "Could not load config file: { $!file }: $_";
+        fail $_;
+      }
+    }
   }
   $!plugins = self.load-rules: %*quid-conf<plugins> // [];
   $!plugouts = self.load-rules: %*quid-conf<plugouts> // [];

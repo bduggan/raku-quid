@@ -50,9 +50,7 @@ submethod TWEAK {
       die "Couldn't find $default" unless $default.IO.e;
       copy $default, $!config-file;
     }
-    try $!conf = Quid::Conf.new(file => $!config-file);
-    $!conf-errors = $_ with $!;
-    return if $!conf-errors;
+    $!conf = Quid::Conf.new(file => $!config-file);
   }
 
   try {
@@ -271,16 +269,26 @@ print("hello world")
 -- ruby
 puts "hello world"
 
+-- llm
+
+Tell me about the differences between ruby and python
+when printing hello world.  Be concise.
+
 -- html
-<p>
 <pre>
 python says:
-<<< cells(2).content >>>
-<<< cells(2).out >>>
+  〈 cells(2).content 〉
+  〈 cells(2).out 〉
 
-and ruby says
-<<< cells(3).content >>>
-<<< cells(3).out >>>
+ and ruby says
+   〈 cells(3).content 〉
+   〈 cells(3).out 〉
+</pre>
+
+and the LLM says
+
+<pre>
+  〈 cells(4).out 〉
 </pre>
 
 =end code

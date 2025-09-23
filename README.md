@@ -37,16 +37,26 @@ It has some similarities to other notebooks like Wolfram, R, Jupyter and Observa
     -- ruby
     puts "hello world"
 
+    -- llm
+
+    Tell me about the differences between ruby and python
+    when printing hello world.  Be concise.
+
     -- html
-    <p>
     <pre>
     python says:
-    <<< cells(2).content >>>
-    <<< cells(2).out >>>
+      〈 cells(2).content 〉
+      〈 cells(2).out 〉
 
-    and ruby says
-    <<< cells(3).content >>>
-    <<< cells(3).out >>>
+     and ruby says
+       〈 cells(3).content 〉
+       〈 cells(3).out 〉
+    </pre>
+
+    and the LLM says
+
+    <pre>
+      〈 cells(4).out 〉
     </pre>
 
 Some of its features:

@@ -1,7 +1,5 @@
 #!/usr/bin/env raku
 
-use lib $*HOME.child('raku-llm-dwim/lib');
-
 use Quid;
 use Log::Async;
 use Terminal::ANSI::OO;
