@@ -250,9 +250,10 @@ Usage:
 Quid is a console application for data exploration and analysis.
 
 It has some similarities to other notebooks like Wolfram,  R, Jupyter and Observable,
-but is a bit more in line with the Raku programming langauge and adheres to
-the philosophy of being "opinionated about being not opinionated" and trying
-stich together various other languages.  Here's a quick example:
+but is primarily aimed at being used in the console, and tries to
+be "opinionated about being not opinionated" by emphasizing a pluggable
+architecture in which arbitrary languages and tools can be used for
+parsing cell input and displaying cell output.  Here's a quick example:
 
 =begin code
 
@@ -289,15 +290,19 @@ Some of its features:
 * Notebooks (called "pages") are plain text.  Pages are divided into cells.
   Lines starting with two dashes ("--") divide a page into cells.
 
-* Cell output are defined by plugins, and every output is stored as a file within
-  the data directory for the page.
+* Data streams have first class support; unbuffered output or live data sources
+  appear as it is available, not after the entire cell is finished executing.
+
+* Cell input and output are defined by plugins.
 
 * Cell types are defined by a configuration file, and new cell types can be easily added with
   the cell plugin architecture.
 
-* Displaying outputs of cells is also done with a plugout architectures, and new output/export
-  options can be added as plugins.
+* Cell output is serialized with the data directory, so it can be re-used between sessions.
 
+* Displaying outputs of cells is also done with a plugout architectures, and new output/export
+  options can be added as plugouts.  Images, HTML, etc can be rendered in a browser.  So despite
+  being console focused, output in the browser is intended to be well-supported.
 
 =head1 CONFIGURATION
 
